@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Into the Wild: Australia's National Parks Tourism</title>
+  <meta name="description" content="A data story about visits to Australia's national parks: how much land is protected, who visits, where the crowds go and how parks recovered from COVID.">
+  <meta name="author" content="Mark Li">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@600;700&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.33.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.23.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.29.0"></script>
+</head>
+<body>
+<div class="page">
+
+  <!-- ================= HEADER ================= -->
+  <header class="masthead">
+    <div>
+      <p class="kicker">Australian national parks tourism</p>
+      <h1>Into the Wild</h1>
+      <p class="dek">Our national parks are busier than ever. Where do the crowds go, and when should you go?</p>
+      
+      <p class="byline">By <span class="author">Mark Li</span> &middot; October 2026 &middot; Data sources are listed at the end</p>
+      <div class="stats">
+        <div class="stat"><span class="stat-number">65.6M</span><span class="stat-label">visits to NSW parks and reserves in 2024-25</span></div>
+        <div class="stat"><span class="stat-number">+24%</span><span class="stat-label">more visits than in 2022</span></div>
+        <div class="stat"><span class="stat-number">89%</span><span class="stat-label">of visitors left satisfied</span></div>
+      </div>
+    </div>
+    <figure class="hero">
+      <img src="images/park.jpg" alt="A hiker stands on a rocky ledge looking out over forested valleys at sunset" width="739" height="415">
+      <figcaption>Photo: <a href="https://adventure.com/australia-new-national-parks/">Adventure.com</a></figcaption>
+    </figure>
+  </header>
+
+  <!-- ================= INTRO ================= -->
+  <section class="intro" aria-label="Introduction">
+    <ol class="contents">
+      <li><a href="#protect"><span>1</span>What we protect</a></li>
+      <li><a href="#outdoors"><span>2</span>We're heading outdoors</a></li>
+      <li><a href="#crowds"><span>3</span>Where the crowds go</a></li>
+      <li><a href="#recovery"><span>4</span>Boom, bust, recovery</a></li>
+      <li><a href="#plan"><span>5</span>Plan your visit</a></li>
+    </ol>
+    <div>
+      <p class="lead">National parks are where many Australians go to walk, swim, camp and switch off. Visits are growing fast, and the most popular parks are feeling the pressure.</p>
+      <p>This page looks at how much land we protect, who is visiting, where the crowds end up and how the parks recovered from COVID. It finishes with some simple tips for planning a quieter trip.</p>
+      <p class="data-note"><strong>A note on the data.</strong> There is no single national count of park visits. Each state measures visits in its own way, so their numbers cannot be added together. This story uses national data for land and for overseas tourists, and the two states that publish detailed, recent visitor counts: New South Wales and Tasmania. Years written like 2024-25 are financial years, from July to June.</p>
+    </div>
+  </section>
+
+  <main>
+    <!-- ================= SECTION 1 ================= -->
+    <section id="protect">
+      <div class="section-head">
+        <span class="section-num">1</span>
+        <h2>What we protect</h2>
+        <p class="section-lede">How much land is national park, and where is it?</p>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 1</p>
+          <h3>Share of each state's land that is national park</h3>
+          <p>A national park is land set aside to protect nature that the public can also visit and enjoy. Australia's national database of protected areas lists 717 of them across the states and territories.</p>
+          <p>The ACT and Tasmania protect the biggest share of their land. The large states hold the most park land in total, but it is only a small slice of each state.</p>
+          <p class="hint">Click a state to highlight its parks in Figure 2. Hover over a state for exact numbers.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig1" class="chart"></div>
+          <p class="source">Source: Collaborative Australian Protected Areas Database (CAPAD) 2024, Department of Climate Change, Energy, the Environment and Water (DCCEEW). Land areas from Geoscience Australia. <a href="specs/01_choropleth.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 2</p>
+          <h3>Every national park, by size</h3>
+          <p>Each dot is one park, placed by its area. The scale grows ten times bigger at each step, so tiny city parks and huge desert parks fit on one chart.</p>
+          <p>Most parks are small. A few outback parks are enormous. Munga-Thirri&ndash;Simpson Desert in South Australia is larger than Belgium.</p>
+          <p class="hint">Use the menu below the chart, or click the map above, to highlight one state. Hover over a dot for the park's name.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig2" class="chart"></div>
+          <p class="source">Source: CAPAD 2024 (DCCEEW). Areas in Namadgi National Park include the Bimberi Wilderness inside it. <a href="specs/02_beeswarm.vg.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 2 ================= -->
+    <section id="outdoors">
+      <div class="section-head">
+        <span class="section-num">2</span>
+        <h2>We're heading outdoors</h2>
+        <p class="section-lede">Park visits keep climbing, and overseas tourists are back.</p>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 3</p>
+          <h3>Visits to NSW parks since 2008</h3>
+          <p>New South Wales has tracked park visits with a regular survey since 2008. Visits have almost doubled since 2010, reaching a record 65.6 million in 2024-25.</p>
+          <p>Bushfires, COVID and floods caused dips along the way, but each time the visitors came back.</p>
+          <p class="hint">Hover over a point for the exact number.</p>
+          <p class="note">The survey changed its method in 2024-25, so compare the last point with care.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig3" class="chart"></div>
+          <p class="source">Source: NSW National Parks and Wildlife Service (NPWS), Parks Visitation Survey 2024-25. <a href="specs/03_line_visits.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 4</p>
+          <h3>Nature trips are booming</h3>
+          <p>This is not only a NSW story. Across Australia, demand from Australian travellers for visits to national and state parks grew by 73% from 2014 to 2023.</p>
+          <p>Only botanic gardens and bushwalking grew faster.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig4" class="chart"></div>
+          <p class="source">Source: Tourism Research Australia, National Visitor Survey, as reported by Austrade (2024). <a href="specs/04_bar_activities.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 5</p>
+          <h3>Overseas tourists, month by month</h3>
+          <p>Read this chart like a clock. Each spoke is a month, and the further a line is from the centre, the more overseas visitors arrived.</p>
+          <p>In 2021 the borders were closed and arrivals fell by 97% compared with 2019. By 2025 they were back to 94% of the 2019 level. December was the busiest month in all three years.</p>
+          <p class="hint">Click a year in the legend to focus on it. Hover over a point for the number.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig5" class="chart"></div>
+          <p class="source">Source: Australian Bureau of Statistics, Overseas Arrivals and Departures, July 2026, Table 5 (short-term visitor arrivals, original series). <a href="specs/05_radial_arrivals.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 3 ================= -->
+    <section id="crowds">
+      <div class="section-head">
+        <span class="section-num">3</span>
+        <h2>Where the crowds go</h2>
+        <p class="section-lede">Most visits happen close to Sydney, and most are by locals.</p>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 6</p>
+          <h3>NSW's 20 most-visited parks</h3>
+          <p>Blue Mountains National Park alone had 7.8 million visits in 2024-25. Circle size shows the number of visits.</p>
+          <p>Twelve of the top 20 parks sit in and around Sydney, so the box on the right zooms in on that area.</p>
+          <p class="hint">Hover over a circle for the park's name, visits and rank.</p>
+        </div>
+        <div class="chart-col">
+          <div class="chart chart-pair">
+            <div id="fig6a"></div>
+            <div id="fig6b"></div>
+          </div>
+          <p class="source">Source: NSW NPWS Parks Visitation Survey 2024-25 (visits), CAPAD 2024 (park locations). Includes some state conservation areas and regional parks. Chart specs (JSON): <a href="specs/06_symbol_map.vl.json">main map</a>, <a href="specs/06b_symbol_map_inset.vl.json">inset</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 7</p>
+          <h3>Where interstate visitors come from</h3>
+          <p>About one in six visits to NSW parks is made by someone from another state. Among capital cities, Melbourne sends the most visits, followed by Brisbane and Canberra.</p>
+          <p>The wider the line, the more visits came from that city.</p>
+          <p class="hint">Hover over a line for the city and number of visits.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig7" class="chart"></div>
+          <p class="source">Source: NSW NPWS Parks Visitation Survey 2024-25. <a href="specs/07_flow_map.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 8</p>
+          <h3>Visits by park region</h3>
+          <p>NSW parks are managed in eight regions. Parks in Greater Sydney get 43% of all visits. That is more than the next three regions combined.</p>
+          <p class="hint">Hover over a box for the number of visits.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig8" class="chart"></div>
+          <p class="source">Source: NSW NPWS Parks Visitation Survey 2024-25. <a href="specs/08_treemap.vg.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 9</p>
+          <h3>Who visits NSW parks?</h3>
+          <p>84 out of every 100 visits are made by people who live in NSW, and most of these are day trips close to home. The other 16 are made by interstate visitors.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig9" class="chart"></div>
+          <p class="source">Source: NSW NPWS Parks Visitation Survey 2024-25. <a href="specs/09_waffle.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 4 ================= -->
+    <section id="recovery">
+      <div class="section-head">
+        <span class="section-num">4</span>
+        <h2>Boom, bust, recovery</h2>
+        <p class="section-lede">COVID hit visitor numbers hard. Most sites have bounced back.</p>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 10</p>
+          <h3>Visitors at 14 Tasmanian park sites</h3>
+          <p>Tasmania counts visitors at 14 sites every year. Each cell shows visitors in thousands.</p>
+          <p>The colour compares each year with 2019-20, the first year in the data. Brown means fewer visitors and green means more. Most sites dipped in 2020-21, and all but one have since recovered. Maria Island has nearly doubled.</p>
+          <p class="hint">Hover over a row to highlight that park in Figure 11.</p>
+          <p class="note">Mount Field has no 2024-25 figure because of a data error at the source. Gordon River counts interstate and overseas visitors only.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig10" class="chart"></div>
+          <p class="source">Source: Tasmania Parks and Wildlife Service, Visitors to Selected Parks and Reserves (Reference Sites), 2019-20 to 2024-25. Figures are estimates. <a href="specs/10_heatmap.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 11</p>
+          <h3>Crowded spots vs quiet walks</h3>
+          <p>Freycinet and Cradle Mountain each drew more than 260,000 visitors in 2024-25.</p>
+          <p>Tasmania's two famous multi-day walks, the Three Capes Track and the Overland Track, had only 11,000 to 13,000 walkers each. They take several days, so far fewer people do them.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig11" class="chart"></div>
+          <p class="source">Source: Tasmania Parks and Wildlife Service, Reference Sites 2024-25. The Overland Track was partly closed by bushfire in February 2025. <a href="specs/11_isotype.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 5 ================= -->
+    <section id="plan">
+      <div class="section-head">
+        <span class="section-num">5</span>
+        <h2>Plan your visit</h2>
+        <p class="section-lede">What the data says about going smarter.</p>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <p class="fig-num">Figure 12</p>
+          <h3>Day trip or overnight?</h3>
+          <p>Most locals visit for the day. Interstate visitors are more likely to stay the night, which gives them time to reach parks further from the city.</p>
+        </div>
+        <div class="chart-col">
+          <div id="fig12" class="chart"></div>
+          <p class="source">Source: NSW NPWS Parks Visitation Survey 2024-25. <a href="specs/12_stacked_trip.vl.json">Chart spec (JSON)</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="story">
+          <h3>Three tips for a quieter trip</h3>
+          <p>Each tip is backed by a chart above.</p>
+        </div>
+        <div class="chart-col">
+          <div class="tips">
+            <article class="tip">
+              <div class="tip-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2f6b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+              </div>
+              <h4>Look beyond Sydney</h4>
+              <p>The busiest parks are close to the city. Parks further out have far more room for each visitor.</p>
+              <span class="see">See Figures 6 and 8</span>
+            </article>
+            <article class="tip">
+              <div class="tip-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2f6b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+              </div>
+              <h4>Skip December and January</h4>
+              <p>Summer and Easter are the busiest times in NSW parks, and December is usually the peak month for overseas visitors.</p>
+              <span class="see">See Figure 5</span>
+            </article>
+            <article class="tip">
+              <div class="tip-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2f6b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l6-11 4 6 3-4 5 9z"/><path d="M14 5.5a1.5 1.5 0 1 0 0-.01"/></svg>
+              </div>
+              <h4>Walk further</h4>
+              <p>Long walks see a small fraction of the crowds at the famous lookouts.</p>
+              <span class="see">See Figure 11</span>
+            </article>
+          </div>
+          <p class="closing" style="margin-top:24px">Australia's national parks are more popular than ever. Crowds can wear down the places people come to see, so spreading visits across more parks and quieter times helps protect them for the next generation.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER: METADATA ================= -->
+  <footer class="site-footer">
+    <div>
+      <h2>Sources and credits</h2>
+    </div>
+    <div>
+      <h3>Data</h3>
+      <ol>
+        <li>Department of Climate Change, Energy, the Environment and Water (DCCEEW). <em>Collaborative Australian Protected Areas Database (CAPAD) 2024, Terrestrial</em>. Data current to 30 June 2024. <a href="https://fed.dcceew.gov.au/datasets/erin::collaborative-australian-protected-areas-database-capad-2024-terrestrial-">fed.dcceew.gov.au</a></li>
+        <li>Geoscience Australia. <em>Area of Australia: States and Territories</em>. <a href="https://www.ga.gov.au/scientific-topics/national-location-information/dimensions/area-of-australia-states-and-territories">ga.gov.au</a></li>
+        <li>NSW National Parks and Wildlife Service. <em>Parks Visitation Survey FY24-25 Annual Report</em> (2026). <a href="https://www.environment.nsw.gov.au/sites/default/files/2026-04/NPWS_parks_visitation_survey_annual_report_fy24-25-optimised.pdf">environment.nsw.gov.au</a></li>
+        <li>Tasmania Parks and Wildlife Service. <em>Visitors to Selected Parks and Reserves (Reference Sites), 2019-20 to 2024-25</em>. <a href="https://parks.tas.gov.au/Documents/Visitors%20to%20Selected%20Parks%20and%20Reserves%20(REFERENCE%20SITES)%20-%202019-20%20to%202024-25%20financial%20year.PDF">parks.tas.gov.au</a></li>
+        <li>Australian Bureau of Statistics. <em>Overseas Arrivals and Departures, Australia, July 2026</em>, Table 5. <a href="https://www.abs.gov.au/statistics/industry/tourism-and-transport/overseas-arrivals-and-departures-australia/jul-2026">abs.gov.au</a></li>
+        <li>Austrade. <em>The rise of nature-based tourism in Australia</em> (22 July 2024), using Tourism Research Australia National Visitor Survey data. <a href="https://austrade.gov.au/en/news-and-analysis/news/the-rise-of-nature-based-tourism-in-australia">austrade.gov.au</a></li>
+        <li>Natural Earth. <em>Admin 1: States and Provinces, 1:50m</em> (public domain). <a href="https://www.naturalearthdata.com/">naturalearthdata.com</a></li>
+      </ol>
+      <h3>About this page</h3>
+      <!-- Check the AI statement matches how you used AI -->
+      <p>Created by <span class="author">Mark Li</span> for FIT3179 Data Visualisation 2, Monash University. Published October 2026.</p>
+      <p>Charts built with <a href="https://vega.github.io/vega-lite/">Vega-Lite</a> and <a href="https://vega.github.io/vega/">Vega</a>. Each chart's JSON spec is linked under the chart and stored in the <code>specs</code> folder of this repository. Maps use an equal-area projection (Australian Albers) so that areas are not stretched. Fonts are Zilla Slab and Nunito Sans from Google Fonts. Header photo from <a href="https://adventure.com/australia-new-national-parks/">Adventure.com</a>.</p>
+      <p>Use of AI: Generative AI (ChatGPT) was used to help find data sources and check grammar. All numbers come from the sources listed above.</p>
+    </div>
+  </footer>
+
+</div>
+<script src="js/main.js"></script>
+</body>
+</html>

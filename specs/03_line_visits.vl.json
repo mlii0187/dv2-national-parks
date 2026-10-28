@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 3. Line chart: estimated visits to NSW national parks and reserves, 2008 to 2024-25. Data: NSW NPWS Parks Visitation Survey 2024-25 annual report.",
+  "width": 690,
+  "height": 260,
+  "data": {
+    "url": "data/nsw_visits_trend.csv",
+    "format": {"type": "csv", "parse": {"x": "number", "visits": "number"}}
+  },
+  "transform": [{"calculate": "datum.visits / 1000000", "as": "millions"}],
+  "encoding": {
+    "x": {
+      "field": "x",
+      "type": "quantitative",
+      "title": null,
+      "scale": {"domain": [2007.5, 2025.8]},
+      "axis": {
+        "values": [2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2025],
+        "labelExpr": "datum.value == 2025 ? '2024-25' : datum.value",
+        "format": "d",
+        "grid": false,
+        "tickSize": 4
+      }
+    },
+    "y": {
+      "field": "millions",
+      "type": "quantitative",
+      "title": "Visits (millions)",
+      "scale": {"domain": [0, 75]},
+      "axis": {"values": [0, 20, 40, 60], "tickSize": 0, "domain": false}
+    }
+  },
+  "layer": [
+    {
+      "mark": {"type": "line", "color": "#3f7a3a", "strokeWidth": 3, "interpolate": "monotone"}
+    },
+    {
+      "mark": {"type": "point", "filled": true, "color": "#3f7a3a", "size": 70, "opacity": 1},
+      "encoding": {
+        "tooltip": [
+          {"field": "year", "title": "Survey year"},
+          {"field": "visits", "title": "Visits", "format": ","}
+        ]
+      }
+    },
+    {
+      "transform": [{"filter": "datum.x == 2008"}],
+      "mark": {"type": "text", "dy": -14, "fontSize": 12, "fontWeight": 600, "color": "#3f7a3a"},
+      "encoding": {"text": {"value": "37.9M"}}
+    },
+    {
+      "transform": [{"filter": "datum.x == 2025"}],
+      "mark": {"type": "text", "align": "right", "dx": -10, "dy": -30, "fontSize": 13, "fontWeight": 700, "color": "#3f7a3a"},
+      "encoding": {"text": {"value": "Record 65.6M"}}
+    },
+    {
+      "transform": [{"filter": "datum.x == 2025"}],
+      "mark": {"type": "text", "align": "right", "dx": -10, "dy": -15, "fontSize": 11, "fontStyle": "italic", "color": "#7d867f"},
+      "encoding": {"text": {"value": "new survey method, compare with care"}}
+    },
+    {
+      "data": {"values": [{"x": 2020, "y1": 47.5, "y2": 30}]},
+      "mark": {"type": "rule", "strokeDash": [3, 3], "color": "#26302a", "strokeWidth": 0.9},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y1", "type": "quantitative"},
+        "y2": {"field": "y2"}
+      }
+    },
+    {
+      "data": {"values": [{"x": 2020, "y": 27, "text": ["Dip in 2020: Black Summer", "bushfires and COVID lockdowns"]}]},
+      "mark": {"type": "text", "baseline": "top", "fontSize": 12, "lineHeight": 16, "color": "#26302a"},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"field": "text"}
+      }
+    },
+    {
+      "data": {"values": [{"x": 2012, "y": 60, "text": ["Visits have almost doubled since 2010"]}]},
+      "mark": {"type": "text", "baseline": "middle", "fontSize": 12.5, "fontStyle": "italic", "color": "#7a4a26"},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"field": "text"}
+      }
+    }
+  ]
+}

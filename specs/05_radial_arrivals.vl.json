@@ -1,0 +1,445 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 5. Radial line chart: international short-term visitor arrivals to Australia by month, 2019, 2021 and 2025. Distance from the centre shows arrivals. Data: ABS Overseas Arrivals and Departures, Table 5 (original series), July 2026 release.",
+  "width": 380,
+  "height": 380,
+  "encoding": {
+    "x": {
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          -1.2,
+          1.2
+        ]
+      },
+      "axis": null
+    },
+    "y": {
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          -1.2,
+          1.2
+        ]
+      },
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "v": 250000
+          },
+          {
+            "v": 500000
+          },
+          {
+            "v": 750000
+          },
+          {
+            "v": 1000000
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "sequence(0, 365, 5)",
+          "as": "deg"
+        },
+        {
+          "flatten": [
+            "deg"
+          ]
+        },
+        {
+          "calculate": "0.1 + 0.9 * datum.v / 1100000",
+          "as": "r"
+        },
+        {
+          "calculate": "datum.r * sin(datum.deg * PI / 180)",
+          "as": "x"
+        },
+        {
+          "calculate": "datum.r * cos(datum.deg * PI / 180)",
+          "as": "y"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#e3e2da",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "detail": {
+          "field": "v",
+          "type": "nominal"
+        },
+        "order": {
+          "field": "deg",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "sequence": {
+          "start": 1,
+          "stop": 13,
+          "as": "m"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "(datum.m - 1) / 12 * 2 * PI",
+          "as": "a"
+        },
+        {
+          "calculate": "0.1 * sin(datum.a)",
+          "as": "x"
+        },
+        {
+          "calculate": "0.1 * cos(datum.a)",
+          "as": "y"
+        },
+        {
+          "calculate": "sin(datum.a)",
+          "as": "x2"
+        },
+        {
+          "calculate": "cos(datum.a)",
+          "as": "y2"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#e9e8e1",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "x2": {
+          "field": "x2"
+        },
+        "y2": {
+          "field": "y2"
+        }
+      }
+    },
+    {
+      "data": {
+        "sequence": {
+          "start": 1,
+          "stop": 13,
+          "as": "m"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.m - 1]",
+          "as": "label"
+        },
+        {
+          "calculate": "(datum.m - 1) / 12 * 2 * PI",
+          "as": "a"
+        },
+        {
+          "calculate": "1.1 * sin(datum.a)",
+          "as": "x"
+        },
+        {
+          "calculate": "1.1 * cos(datum.a)",
+          "as": "y"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 11.5,
+        "color": "#7d867f",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "v": 500000,
+            "t": "0.5M"
+          },
+          {
+            "v": 1000000,
+            "t": "1M"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "0.1 + 0.9 * datum.v / 1100000",
+          "as": "r"
+        },
+        {
+          "calculate": "datum.r * sin(-0.27)",
+          "as": "x"
+        },
+        {
+          "calculate": "datum.r * cos(-0.27)",
+          "as": "y"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "color": "#9aa39c",
+        "align": "right",
+        "dx": -2
+      },
+      "encoding": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/abs_arrivals_monthly.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "arrivals": "number",
+            "year": "number",
+            "month": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.year == 2019 || datum.year == 2021 || datum.year == 2025"
+        },
+        {
+          "calculate": "'' + datum.year",
+          "as": "Year"
+        },
+        {
+          "calculate": "(datum.month - 1) / 12 * 2 * PI",
+          "as": "a"
+        },
+        {
+          "calculate": "0.1 + 0.9 * datum.arrivals / 1100000",
+          "as": "r"
+        },
+        {
+          "calculate": "datum.r * sin(datum.a)",
+          "as": "x"
+        },
+        {
+          "calculate": "datum.r * cos(datum.a)",
+          "as": "y"
+        }
+      ],
+      "layer": [
+        {
+          "params": [
+            {
+              "name": "yearPick",
+              "select": {
+                "type": "point",
+                "fields": [
+                  "Year"
+                ]
+              },
+              "bind": "legend"
+            }
+          ],
+          "mark": {
+            "type": "line",
+            "interpolate": "cardinal-closed",
+            "strokeWidth": 2.6
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "y": {
+              "field": "y"
+            },
+            "order": {
+              "field": "month",
+              "type": "quantitative"
+            },
+            "color": {
+              "field": "Year",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "2019",
+                  "2021",
+                  "2025"
+                ],
+                "range": [
+                  "#9aa39c",
+                  "#a8744a",
+                  "#3f7a3a"
+                ]
+              },
+              "legend": {
+                "title": "Click a year to focus",
+                "orient": "right",
+                "symbolType": "stroke",
+                "symbolStrokeWidth": 3
+              }
+            },
+            "strokeDash": {
+              "condition": {
+                "test": "datum.year == 2019",
+                "value": [
+                  5,
+                  3
+                ]
+              },
+              "value": [
+                1,
+                0
+              ]
+            },
+            "opacity": {
+              "condition": {
+                "param": "yearPick",
+                "value": 1
+              },
+              "value": 0.12
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 34
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "y": {
+              "field": "y"
+            },
+            "color": {
+              "field": "Year",
+              "type": "nominal"
+            },
+            "opacity": {
+              "condition": {
+                "param": "yearPick",
+                "value": 1
+              },
+              "value": 0.1
+            },
+            "tooltip": [
+              {
+                "field": "month_name",
+                "title": "Month"
+              },
+              {
+                "field": "Year"
+              },
+              {
+                "field": "arrivals",
+                "title": "Visitor arrivals",
+                "format": ","
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.year == 2025 && datum.month == 12"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -10,
+            "dy": -6,
+            "fontSize": 12,
+            "fontWeight": 700,
+            "color": "#2f6b30"
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "y": {
+              "field": "y"
+            },
+            "text": {
+              "value": "Dec 2025: 1.04M"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 0,
+            "y": -0.34,
+            "text": [
+              "2021: borders closed.",
+              "Arrivals fell 97%."
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#7a4a26",
+        "lineHeight": 16,
+        "baseline": "top"
+      },
+      "encoding": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    }
+  ]
+}

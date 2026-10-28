@@ -1,0 +1,206 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 9. Waffle chart: of every 100 visits to NSW parks, how many were by NSW residents and how many by interstate visitors, 2024-25. Data: NSW NPWS Parks Visitation Survey 2024-25.",
+  "spacing": 28,
+  "hconcat": [
+    {
+      "width": 190,
+      "height": 190,
+      "data": {
+        "url": "data/nsw_visitor_waffle.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "row": "number",
+            "col": "number",
+            "id": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "rect",
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "col",
+          "type": "ordinal",
+          "axis": null,
+          "scale": {
+            "paddingInner": 0.16
+          }
+        },
+        "y": {
+          "field": "row",
+          "type": "ordinal",
+          "axis": null,
+          "scale": {
+            "paddingInner": 0.16
+          }
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "NSW residents",
+              "Interstate"
+            ],
+            "range": [
+              "#3f7a3a",
+              "#a8744a"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "title": "Visitor"
+          },
+          {
+            "field": "note",
+            "title": "Note"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "'Each square is 1 in every 100 visits'",
+          "as": "note"
+        }
+      ]
+    },
+    {
+      "width": 360,
+      "height": 190,
+      "data": {
+        "values": [
+          {
+            "y": 34,
+            "big": "84",
+            "label": "NSW residents",
+            "sub": "54.8 million visits",
+            "c": "#3f7a3a"
+          },
+          {
+            "y": 150,
+            "big": "16",
+            "label": "Interstate visitors",
+            "sub": "10.8 million visits",
+            "c": "#a8744a"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 44,
+            "fontWeight": 700,
+            "font": "Zilla Slab, Georgia, serif"
+          },
+          "encoding": {
+            "x": {
+              "value": 0
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            },
+            "text": {
+              "field": "big"
+            },
+            "color": {
+              "field": "c",
+              "type": "nominal",
+              "scale": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 14,
+            "fontWeight": 700,
+            "dy": -9,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "x": {
+              "value": 70
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 12.5,
+            "dy": 10,
+            "color": "#7d867f"
+          },
+          "encoding": {
+            "x": {
+              "value": 70
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            },
+            "text": {
+              "field": "sub"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "t": [
+                  "The brown squares are interstate visitors.",
+                  "Figure 7 shows where many of them come from."
+                ]
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "fontSize": 12.5,
+            "fontStyle": "italic",
+            "color": "#7a4a26",
+            "lineHeight": 17
+          },
+          "encoding": {
+            "x": {
+              "value": 0
+            },
+            "y": {
+              "value": 74
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

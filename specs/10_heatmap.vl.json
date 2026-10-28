@@ -1,0 +1,81 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 10. Heatmap: estimated visitors at 14 Tasmanian park sites by financial year, coloured by change since 2019-20. Data: Tasmania Parks and Wildlife Service, Visitors to Selected Parks and Reserves (Reference Sites) 2019-20 to 2024-25.",
+  "width": 474,
+  "height": {"step": 21},
+  "data": {
+    "url": "data/tas_reference_sites.csv",
+    "format": {"type": "csv", "parse": {"visitors_k": "number", "change_vs_2019_20": "number", "latest_change": "number"}}
+  },
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {"orient": "top", "labelAngle": 0, "domain": false, "ticks": false, "labelPadding": 6,
+        "labelColor": {"condition": {"test": "datum.value == '2020-21'", "value": "#7a4a26"}, "value": "#5d665f"},
+        "labelFontWeight": {"condition": {"test": "datum.value == '2020-21'", "value": 700}, "value": 400}}
+    },
+    "y": {
+      "field": "site",
+      "type": "nominal",
+      "title": null,
+      "sort": {"field": "latest_change", "op": "max", "order": "descending"},
+      "axis": {"domain": false, "ticks": false, "labelPadding": 8, "labelLimit": 190}
+    }
+  },
+  "layer": [
+    {
+      "transform": [{"filter": "isValid(datum.visitors_k)"}],
+      "params": [
+        {"name": "hoverSite", "select": {"type": "point", "fields": ["site"], "on": "mouseover", "clear": "mouseout"}}
+      ],
+      "mark": {"type": "rect", "stroke": "#fbfaf6", "strokeWidth": 2},
+      "encoding": {
+        "color": {
+          "field": "change_vs_2019_20",
+          "type": "quantitative",
+          "title": "Change since 2019-20",
+          "scale": {"domain": [-0.45, 0, 1], "range": ["#a8744a", "#f6f3ec", "#2f6b30"], "clamp": true},
+          "legend": {"format": "+.0%", "values": [-0.4, 0, 0.5, 1], "gradientLength": 150, "orient": "right"}
+        },
+        "opacity": {"condition": {"param": "hoverSite", "empty": true, "value": 1}, "value": 0.35},
+        "tooltip": [
+          {"field": "site", "title": "Site"},
+          {"field": "year", "title": "Financial year"},
+          {"field": "visitors_k", "title": "Visitors (thousands)"},
+          {"field": "change_vs_2019_20", "title": "Change since 2019-20", "format": "+.0%"}
+        ]
+      }
+    },
+    {
+      "transform": [{"filter": "isValid(datum.visitors_k)"}],
+      "mark": {"type": "text", "fontSize": 11},
+      "encoding": {
+        "text": {"field": "visitors_k", "type": "quantitative", "format": ",.0f"},
+        "color": {"condition": {"test": "datum.change_vs_2019_20 > 0.55", "value": "#ffffff"}, "value": "#26302a"},
+        "opacity": {"condition": {"param": "hoverSite", "empty": true, "value": 1}, "value": 0.35}
+      }
+    },
+    {
+      "transform": [{"filter": "!isValid(datum.visitors_k)"}],
+      "mark": {"type": "rect", "fill": "#ffffff", "stroke": "#9aa39c", "strokeDash": [3, 2], "strokeWidth": 1},
+      "encoding": {"tooltip": {"value": "Mount Field 2024-25: not available (data error at source)"}}
+    },
+    {
+      "transform": [{"filter": "!isValid(datum.visitors_k)"}],
+      "mark": {"type": "text", "fontSize": 10.5, "color": "#7d867f"},
+      "encoding": {"text": {"value": "n/a"}}
+    },
+    {
+      "data": {"values": [{"year": "2020-21"}]},
+      "mark": {"type": "rect", "fill": null, "stroke": "#a8744a", "strokeWidth": 2.2, "cornerRadius": 3},
+      "encoding": {"y": {"value": -2}, "y2": {"value": 296}}
+    },
+    {
+      "data": {"values": [{"year": "2020-21"}]},
+      "mark": {"type": "text", "baseline": "top", "fontSize": 12, "fontWeight": 700, "color": "#7a4a26"},
+      "encoding": {"y": {"value": 302}, "text": {"value": "COVID dip"}}
+    }
+  ]
+}

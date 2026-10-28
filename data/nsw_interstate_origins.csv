@@ -1,0 +1,7 @@
+origin,visits,lon,lat,dest_lon,dest_lat,label,label_lon,label_lat,label_align
+Melbourne,2260821,144.9631,-37.8136,147.6,-32.6,Melbourne 2.3M,144.4,-38.5,right
+Brisbane,1955529,153.0251,-27.4698,147.6,-32.6,Brisbane 2.0M,153.6,-27.2,left
+Canberra (ACT),1692130,149.13,-35.2809,147.6,-32.6,Canberra 1.7M,150.4,-35.9,left
+Adelaide,340212,138.6007,-34.9285,147.6,-32.6,Adelaide 0.3M,138.0,-35.6,right
+Hobart,85825,147.3272,-42.8821,147.6,-32.6,Hobart 0.09M,148.0,-43.2,left
+Perth,79059,115.8605,-31.9505,147.6,-32.6,Perth 0.08M,115.8,-30.6,center

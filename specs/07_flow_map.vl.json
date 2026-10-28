@@ -1,0 +1,392 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 7. Flow map: visits to NSW parks by people from interstate capital cities, 2024-25. Line width shows visits. Data: NSW NPWS Parks Visitation Survey 2024-25, Natural Earth (boundaries).",
+  "width": 740,
+  "height": 400,
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": 650.24,
+    "translate": [
+      224.19,
+      -419.73
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.properties.state == 'NSW'",
+            "value": "#dfe8d8"
+          },
+          "value": "#efeee8"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/nsw_interstate_flow_lines.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "visits": "number",
+            "step": "number",
+            "lon": "number",
+            "lat": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "line",
+        "color": "#a8744a",
+        "opacity": 0.78,
+        "strokeCap": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "detail": {
+          "field": "origin",
+          "type": "nominal"
+        },
+        "order": {
+          "field": "step",
+          "type": "quantitative"
+        },
+        "strokeWidth": {
+          "field": "visits",
+          "type": "quantitative",
+          "title": "Visits per year",
+          "scale": {
+            "domain": [
+              0,
+              2300000
+            ],
+            "range": [
+              1,
+              15
+            ]
+          },
+          "legend": {
+            "orient": "none",
+            "legendX": 515,
+            "legendY": 8,
+            "values": [
+              200000,
+              1000000,
+              2000000
+            ],
+            "labelExpr": "format(datum.value / 1000000, '.1~f') + 'M'",
+            "symbolStrokeColor": "#a8744a",
+            "symbolType": "stroke",
+            "symbolSize": 400
+          }
+        },
+        "tooltip": [
+          {
+            "field": "origin",
+            "title": "From"
+          },
+          {
+            "field": "visits",
+            "title": "Visits to NSW parks",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/nsw_interstate_origins.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "visits": "number",
+            "lon": "number",
+            "lat": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "dest_lon": "number",
+            "dest_lat": "number"
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#26302a",
+            "size": 30,
+            "opacity": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "tooltip": [
+              {
+                "field": "origin",
+                "title": "From"
+              },
+              {
+                "field": "visits",
+                "title": "Visits to NSW parks",
+                "format": ","
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.label_align == 'left'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "label_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "label_lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.label_align == 'right'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "label_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "label_lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.label_align == 'center'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "label_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "label_lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 147.6,
+            "lat": -32.6,
+            "t": "NSW parks"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#3f7a3a",
+            "size": 120,
+            "opacity": 1,
+            "stroke": "#ffffff",
+            "strokeWidth": 2
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -10,
+            "dy": -10,
+            "fontSize": 12.5,
+            "fontWeight": 700,
+            "color": "#2f6b30"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": 112,
+            "text": [
+              "Melburnians are the biggest interstate",
+              "group, with 2.3 million visits a year."
+            ]
+          },
+          {
+            "y": 228,
+            "text": [
+              "Distance matters. Perth and Hobart",
+              "send fewer than 100,000 visits each."
+            ]
+          },
+          {
+            "y": 284,
+            "text": [
+              "Canberra is small but close, so it sends",
+              "nearly as many visits as Brisbane."
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12.5,
+        "fontStyle": "italic",
+        "color": "#7a4a26",
+        "lineHeight": 17
+      },
+      "encoding": {
+        "x": {
+          "value": 515
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": null
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "text": [
+              "Capital cities only. People from regional",
+              "areas made another 4.4 million visits."
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 11,
+        "color": "#7d867f",
+        "lineHeight": 15
+      },
+      "encoding": {
+        "x": {
+          "value": 515
+        },
+        "y": {
+          "value": 350
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    }
+  ]
+}

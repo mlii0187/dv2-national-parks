@@ -1,0 +1,150 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 12. 100% stacked bar chart: share of visits to NSW parks that were day trips or included an overnight stay, by where visitors live, 2024-25. Data: NSW NPWS Parks Visitation Survey 2024-25.",
+  "width": 560,
+  "height": {
+    "step": 40
+  },
+  "data": {
+    "url": "data/nsw_trip_length.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.trip == 'Day trip' ? 0 : 1",
+      "as": "trip_order"
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "pct",
+          "as": "cum"
+        }
+      ],
+      "groupby": [
+        "group"
+      ],
+      "sort": [
+        {
+          "field": "trip_order"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.cum - datum.pct / 2",
+      "as": "mid"
+    },
+    {
+      "calculate": "datum.pct >= 25 ? datum.pct + '% ' + (datum.trip == 'Day trip' ? 'day trip' : 'overnight') : datum.pct + '%'",
+      "as": "label"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "group",
+      "type": "nominal",
+      "title": null,
+      "sort": [
+        "NSW residents",
+        "Interstate visitors"
+      ],
+      "axis": {
+        "domain": false,
+        "ticks": false,
+        "labelPadding": 10,
+        "labelFontSize": 12.5
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "height": {
+          "band": 0.7
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative",
+          "stack": "zero",
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "trip",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Day trip",
+              "Overnight"
+            ],
+            "range": [
+              "#cfe0c4",
+              "#3f7a3a"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "symbolType": "square",
+            "title": null
+          }
+        },
+        "order": {
+          "field": "trip_order"
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "title": "Visitors"
+          },
+          {
+            "field": "trip",
+            "title": "Trip type"
+          },
+          {
+            "field": "pct",
+            "title": "Share of visits (%)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 12.5,
+        "fontWeight": 700
+      },
+      "encoding": {
+        "x": {
+          "field": "mid",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.trip == 'Overnight'",
+            "value": "#ffffff"
+          },
+          "value": "#26302a"
+        }
+      }
+    }
+  ]
+}

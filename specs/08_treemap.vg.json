@@ -1,0 +1,90 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Figure 8. Treemap: share of visits to NSW parks by NPWS region (branch), 2024-25. Box area shows visits. Data: NSW NPWS Parks Visitation Survey 2024-25.",
+  "width": 740,
+  "height": 180,
+  "padding": 5,
+  "autosize": "none",
+  "data": [
+    {
+      "name": "regions",
+      "url": "data/nsw_visits_by_region.csv",
+      "format": {"type": "csv", "parse": {"visits": "number", "share": "number"}},
+      "transform": [
+        {"type": "nest", "keys": ["region"]},
+        {
+          "type": "treemap",
+          "field": "visits",
+          "sort": {"field": "value", "order": "descending"},
+          "method": "squarify",
+          "ratio": 1.6,
+          "round": true,
+          "paddingInner": 2,
+          "size": [{"signal": "width"}, {"signal": "height"}]
+        },
+        {"type": "filter", "expr": "!datum.children && datum.visits"},
+        {"type": "window", "sort": {"field": "visits", "order": "descending"}, "ops": ["row_number"], "as": ["rank"]},
+        {"type": "formula", "as": "w", "expr": "datum.x1 - datum.x0"},
+        {"type": "formula", "as": "h", "expr": "datum.y1 - datum.y0"}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [1, 2, 3, 4, 5, 6, 7, 8],
+      "range": ["#2f6b30", "#5f9a52", "#7fae6b", "#93bb81", "#a6c796", "#c3d9b6", "#cfe0c4", "#dbe8d2"]
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "regions"},
+      "encode": {
+        "enter": {
+          "x": {"field": "x0"},
+          "y": {"field": "y0"},
+          "x2": {"field": "x1"},
+          "y2": {"field": "y1"},
+          "fill": {"scale": "color", "field": "rank"},
+          "tooltip": {"signal": "{'Region': datum.region, 'Visits': format(datum.visits, ','), 'Share of all visits': datum.share + '%'}"}
+        },
+        "hover": {"stroke": {"value": "#a8744a"}, "strokeWidth": {"value": 2}},
+        "update": {"strokeWidth": {"value": 0}}
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "regions"},
+      "interactive": false,
+      "encode": {
+        "enter": {
+          "x": {"signal": "datum.x0 + 8"},
+          "y": {"signal": "datum.y0 + 18"},
+          "fontWeight": {"value": 700},
+          "fontSize": {"signal": "datum.rank == 1 ? 15 : 12"},
+          "fill": {"signal": "datum.rank <= 3 ? '#ffffff' : '#26302a'"},
+          "limit": {"signal": "datum.w - 12"},
+          "text": {"signal": "datum.w > 95 ? datum.region : split(datum.region, ' ')[0]"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "regions"},
+      "interactive": false,
+      "encode": {
+        "enter": {
+          "x": {"signal": "datum.x0 + 8"},
+          "y": {"signal": "datum.rank == 1 ? datum.y0 + 52 : datum.y0 + 34"},
+          "fontSize": {"signal": "datum.rank == 1 ? 32 : 12"},
+          "fontWeight": {"signal": "datum.rank == 1 ? 700 : 400"},
+          "font": {"signal": "datum.rank == 1 ? 'Zilla Slab, Georgia, serif' : null"},
+          "fill": {"signal": "datum.rank <= 3 ? '#ffffff' : '#26302a'"},
+          "text": {"signal": "datum.share + '%'"}
+        }
+      }
+    }
+  ]
+}

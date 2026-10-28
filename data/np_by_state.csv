@@ -1,0 +1,9 @@
+state,parks,np_km2,land_km2,pct_np,state_name,anchor_lon,anchor_lat,label_lon,label_lat,callout
+ACT,1,1067,2358,45.2,Australian Capital Territory,149.0,-35.5,155.0,-36.6,1
+TAS,18,14885,68401,21.8,Tasmania,146.6,-42.0,151.5,-42.6,1
+VIC,45,29108,227444,12.8,Victoria,144.2,-37.0,144.2,-37.0,0
+SA,29,78567,984321,8.0,South Australia,135.3,-29.8,135.3,-29.8,0
+NSW,212,56127,801150,7.0,New South Wales,146.6,-32.3,146.6,-32.3,0
+NT,18,57782,1347791,4.3,Northern Territory,133.4,-19.5,133.4,-19.5,0
+QLD,276,67874,1729742,3.9,Queensland,144.5,-22.0,144.5,-22.0,0
+WA,118,84877,2527013,3.4,Western Australia,121.5,-25.5,121.5,-25.5,0

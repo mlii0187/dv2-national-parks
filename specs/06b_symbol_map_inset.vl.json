@@ -1,0 +1,329 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 6 (right). Inset of the proportional symbol map: Sydney and surrounds, where 12 of the 20 most-visited NSW parks are. Same circle scale as the main map. Data: as Figure 6.",
+  "width": 300,
+  "height": 280,
+  "view": {
+    "stroke": "#a8744a",
+    "strokeWidth": 1.6,
+    "fill": "#ffffff"
+  },
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": 9795.45,
+    "translate": [
+      -2512.47,
+      -10322.23
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "stroke": "#c2cbbd",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.properties.state == 'NSW'",
+            "value": "#e4ebde"
+          },
+          "value": "#f4f3ee"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/nsw_top20_parks.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "visits": "number",
+            "lon": "number",
+            "lat": "number",
+            "rank": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.lon >= 150 && datum.lon <= 151.85 && datum.lat <= -33.25 && datum.lat >= -34.5"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#3f7a3a",
+            "opacity": 0.5,
+            "stroke": "#2f6b30",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "visits",
+              "type": "quantitative",
+              "title": "Visits, 2024-25",
+              "scale": {
+                "domain": [
+                  0,
+                  8000000
+                ],
+                "range": [
+                  0,
+                  1500
+                ]
+              },
+              "legend": {
+                "values": [
+                  1000000,
+                  4000000,
+                  7800000
+                ],
+                "labelExpr": "format(datum.value / 1000000, '.1~f') + 'M'",
+                "symbolFillColor": "#ffffff",
+                "symbolStrokeColor": "#7d867f",
+                "orient": "right"
+              }
+            },
+            "order": {
+              "field": "visits",
+              "sort": "descending"
+            },
+            "tooltip": [
+              {
+                "field": "rank",
+                "title": "Rank"
+              },
+              {
+                "field": "park",
+                "title": "Park"
+              },
+              {
+                "field": "visits",
+                "title": "Visits",
+                "format": ","
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rank == 1"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "dy": -30,
+            "fontSize": 11.5,
+            "fontWeight": 700,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "Blue Mountains 7.8M"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rank == 2"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "dy": 4,
+            "fontSize": 11.5,
+            "fontWeight": 700,
+            "color": "#26302a",
+            "align": "right",
+            "dx": -21
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "Royal 4.9M"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rank == 3"
+            }
+          ],
+          "mark": {
+            "type": "rule",
+            "color": "#26302a",
+            "strokeWidth": 0.8
+          },
+          "encoding": {
+            "x": {
+              "value": 169
+            },
+            "y": {
+              "value": 64
+            },
+            "x2": {
+              "value": 187
+            },
+            "y2": {
+              "value": 88
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rank == 3"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "middle",
+            "fontSize": 11.5,
+            "fontWeight": 700,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "x": {
+              "value": 166
+            },
+            "y": {
+              "value": 60
+            },
+            "text": {
+              "value": "Ku-ring-gai Chase 4.3M"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 151.209,
+            "lat": -33.868,
+            "t": "Sydney CBD"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#26302a",
+            "size": 20,
+            "opacity": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 16,
+            "dy": 14,
+            "fontSize": 11.5,
+            "fontWeight": 700,
+            "color": "#26302a"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Inset: Sydney and surrounds. 12 of the top 20 are here."
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#7a4a26"
+      },
+      "encoding": {
+        "x": {
+          "value": 8
+        },
+        "y": {
+          "value": 270
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

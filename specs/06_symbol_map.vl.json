@@ -1,0 +1,223 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 6 (left). Proportional symbol map: the 20 most-visited NSW parks, 2024-25. Circle area shows visits. The brown box marks the area shown in the inset. Data: NSW NPWS Parks Visitation Survey 2024-25 (visits), CAPAD 2024 (park locations), Natural Earth (boundaries).",
+  "width": 320,
+  "height": 300,
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": 1524.02,
+    "translate": [
+      -185.53,
+      -1442.14
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "stroke": "#c2cbbd",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.properties.state == 'NSW'",
+            "value": "#e4ebde"
+          },
+          "value": "#f4f3ee"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "i": 0,
+            "lon": 150.0,
+            "lat": -33.25
+          },
+          {
+            "i": 1,
+            "lon": 151.85,
+            "lat": -33.25
+          },
+          {
+            "i": 2,
+            "lon": 151.85,
+            "lat": -34.5
+          },
+          {
+            "i": 3,
+            "lon": 150.0,
+            "lat": -34.5
+          },
+          {
+            "i": 4,
+            "lon": 150.0,
+            "lat": -33.25
+          }
+        ]
+      },
+      "mark": {
+        "type": "line",
+        "color": "#a8744a",
+        "strokeWidth": 1.6
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "order": {
+          "field": "i",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/nsw_top20_parks.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "visits": "number",
+            "lon": "number",
+            "lat": "number",
+            "rank": "number"
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#3f7a3a",
+            "opacity": 0.5,
+            "stroke": "#2f6b30",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "visits",
+              "type": "quantitative",
+              "title": "Visits, 2024-25",
+              "scale": {
+                "domain": [
+                  0,
+                  8000000
+                ],
+                "range": [
+                  0,
+                  1500
+                ]
+              },
+              "legend": null
+            },
+            "order": {
+              "field": "visits",
+              "sort": "descending"
+            },
+            "tooltip": [
+              {
+                "field": "rank",
+                "title": "Rank"
+              },
+              {
+                "field": "park",
+                "title": "Park"
+              },
+              {
+                "field": "visits",
+                "title": "Visits",
+                "format": ","
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rank == 5 || datum.rank == 18 || datum.rank == 19"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -14,
+            "fontSize": 11.5,
+            "color": "#3d4740"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "short"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Sydney area, enlarged on the right"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#7a4a26"
+      },
+      "encoding": {
+        "x": {
+          "value": 6
+        },
+        "y": {
+          "value": 292
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

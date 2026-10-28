@@ -1,0 +1,117 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 4. Bar chart: growth in nature-based activities among Australian travellers, 2014 to 2023. Data: Tourism Research Australia National Visitor Survey, reported by Austrade (2024).",
+  "width": 470,
+  "height": {
+    "step": 21
+  },
+  "data": {
+    "url": "data/nature_activity_growth.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "growth_pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.activity == 'National or state parks'",
+      "as": "highlight"
+    },
+    {
+      "calculate": "'+' + datum.growth_pct + '%'",
+      "as": "label"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "activity",
+      "type": "nominal",
+      "sort": null,
+      "title": null,
+      "axis": {
+        "labelLimit": 230,
+        "domain": false,
+        "ticks": false,
+        "labelPadding": 8,
+        "labelFontWeight": {
+          "condition": {
+            "test": "datum.value == 'National or state parks'",
+            "value": 700
+          },
+          "value": 400
+        },
+        "labelColor": {
+          "condition": {
+            "test": "datum.value == 'National or state parks'",
+            "value": "#7a4a26"
+          },
+          "value": "#3d4740"
+        }
+      }
+    },
+    "x": {
+      "field": "growth_pct",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "domain": [
+          0,
+          95
+        ]
+      },
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 2,
+        "height": {
+          "band": 0.72
+        }
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.highlight",
+            "value": "#a8744a"
+          },
+          "value": "#b9d3a8"
+        },
+        "tooltip": [
+          {
+            "field": "activity",
+            "title": "Activity"
+          },
+          {
+            "field": "growth_pct",
+            "title": "Growth since 2014 (%)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 11.5
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.highlight",
+            "value": "#7a4a26"
+          },
+          "value": "#5d665f"
+        }
+      }
+    }
+  ]
+}

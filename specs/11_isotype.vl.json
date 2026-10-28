@@ -1,0 +1,71 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 11. Isotype chart: visitors in 2024-25 at Tasmania's two busiest day-visit sites and its two famous multi-day walks. Each figure is 10,000 visitors. Data: Tasmania Parks and Wildlife Service reference sites.",
+  "width": 470,
+  "height": {"step": 40},
+  "params": [{"name": "hl", "value": ""}],
+  "data": {
+    "url": "data/tas_reference_sites.csv",
+    "format": {"type": "csv", "parse": {"visitors_k": "number"}}
+  },
+  "transform": [
+    {"filter": "datum.year == '2024-25'"},
+    {"filter": {"field": "site", "oneOf": ["Freycinet", "Cradle Mountain (Dove Lake)", "Three Capes Track", "Overland Track"]}}
+  ],
+  "encoding": {
+    "y": {
+      "field": "site",
+      "type": "nominal",
+      "title": null,
+      "sort": ["Freycinet", "Cradle Mountain (Dove Lake)", "Three Capes Track", "Overland Track"],
+      "axis": {"domain": false, "ticks": false, "labelPadding": 10, "labelFontSize": 12.5, "labelLimit": 200}
+    }
+  },
+  "layer": [
+    {
+      "transform": [
+        {"calculate": "sequence(0, max(1, round(datum.visitors_k / 10)))", "as": "icon"},
+        {"flatten": ["icon"]}
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 230,
+        "shape": "M-0.17,-0.78 A0.17,0.17 0 1 1 0.17,-0.78 A0.17,0.17 0 1 1 -0.17,-0.78 Z M-0.3,-0.52 L0.3,-0.52 L0.26,0.08 L0.15,0.08 L0.15,0.95 L0.02,0.95 L0.02,0.25 L-0.02,0.25 L-0.02,0.95 L-0.15,0.95 L-0.15,0.08 L-0.26,0.08 Z"
+      },
+      "encoding": {
+        "x": {"field": "icon", "type": "quantitative", "scale": {"domain": [-0.6, 29]}, "axis": null},
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "scale": {"domain": ["Day-visit site", "Multi-day walk"], "range": ["#3f7a3a", "#a8744a"]},
+          "legend": {"orient": "bottom", "title": null, "symbolType": "square"}
+        },
+        "opacity": {"condition": {"test": "hl == '' || datum.site == hl", "value": 1}, "value": 0.2},
+        "tooltip": [
+          {"field": "site", "title": "Site"},
+          {"field": "visitors_k", "title": "Visitors in 2024-25 (thousands)"}
+        ]
+      }
+    },
+    {
+      "transform": [{"calculate": "max(1, round(datum.visitors_k / 10)) - 0.3", "as": "end"}],
+      "mark": {"type": "text", "align": "left", "fontSize": 12, "fontWeight": 600, "color": "#3d4740"},
+      "encoding": {
+        "x": {"field": "end", "type": "quantitative"},
+        "text": {"field": "visitors_k", "type": "quantitative", "format": ",.0f"},
+        "opacity": {"condition": {"test": "hl == '' || datum.site == hl", "value": 1}, "value": 0.2}
+      }
+    },
+    {
+      "data": {"values": [{"t": "Each figure = 10,000 visitors. Labels show thousands."}]},
+      "mark": {"type": "text", "align": "left", "fontSize": 11, "color": "#7d867f"},
+      "encoding": {"x": {"value": 0}, "y": {"value": -12}, "text": {"field": "t"}}
+    },
+    {
+      "data": {"values": [{"t": ["Want quiet? Walk further. Each famous", "walk gets fewer than 1 visitor for", "every 20 at Freycinet."]}]},
+      "mark": {"type": "text", "align": "left", "baseline": "top", "fontSize": 12.5, "fontStyle": "italic", "color": "#7a4a26", "lineHeight": 17},
+      "encoding": {"x": {"value": 230}, "y": {"value": 88}, "text": {"field": "t"}}
+    }
+  ]
+}

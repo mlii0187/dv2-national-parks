@@ -1,0 +1,474 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Figure 1. Choropleth map: share of each state's land that is national park. Data: CAPAD 2024 (DCCEEW), Geoscience Australia state areas, Natural Earth boundaries.",
+  "width": 740,
+  "height": 400,
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": 650.24,
+    "translate": [
+      224.19,
+      -419.73
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.properties.state",
+          "as": "state"
+        },
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/np_by_state.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "pct_np": "number",
+                  "np_km2": "number",
+                  "parks": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "state_name",
+              "pct_np",
+              "np_km2",
+              "parks"
+            ]
+          }
+        }
+      ],
+      "params": [
+        {
+          "name": "pickState",
+          "select": {
+            "type": "point",
+            "fields": [
+              "state"
+            ],
+            "on": "click",
+            "clear": "dblclick"
+          }
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "color": {
+          "field": "pct_np",
+          "type": "quantitative",
+          "title": "Share of state land that is national park",
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              5,
+              10,
+              20,
+              30
+            ],
+            "range": [
+              "#e3ecdc",
+              "#b9d3a8",
+              "#7fae6b",
+              "#3f7a3a",
+              "#1f4d23"
+            ]
+          },
+          "legend": null
+        },
+        "stroke": {
+          "condition": {
+            "param": "pickState",
+            "empty": false,
+            "value": "#a8744a"
+          },
+          "value": "#ffffff"
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "pickState",
+            "empty": false,
+            "value": 3
+          },
+          "value": 1
+        },
+        "tooltip": [
+          {
+            "field": "state_name",
+            "title": "State"
+          },
+          {
+            "field": "pct_np",
+            "title": "Share that is national park (%)"
+          },
+          {
+            "field": "np_km2",
+            "title": "National park area (km²)",
+            "format": ","
+          },
+          {
+            "field": "parks",
+            "title": "Number of national parks"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/np_by_state.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "pct_np": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "anchor_lon": "number",
+            "anchor_lat": "number",
+            "callout": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "format(datum.pct_np, '.1f') + '%'",
+          "as": "pct_label"
+        },
+        {
+          "calculate": "datum.state + ' ' + datum.pct_label",
+          "as": "callout_label"
+        }
+      ],
+      "layer": [
+        {
+          "transform": [
+            {
+              "filter": "datum.callout == 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontWeight": 700,
+            "fontSize": 12,
+            "dy": -7
+          },
+          "encoding": {
+            "longitude": {
+              "field": "label_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "label_lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "state"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.pct_np >= 10",
+                "value": "#ffffff"
+              },
+              "value": "#26302a"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.callout == 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontSize": 11.5,
+            "dy": 8
+          },
+          "encoding": {
+            "longitude": {
+              "field": "label_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "label_lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "pct_label"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.pct_np >= 10",
+                "value": "#ffffff"
+              },
+              "value": "#26302a"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.callout == 1"
+            }
+          ],
+          "mark": {
+            "type": "rule",
+            "color": "#26302a",
+            "strokeWidth": 0.8
+          },
+          "encoding": {
+            "longitude": {
+              "field": "anchor_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "anchor_lat",
+              "type": "quantitative"
+            },
+            "longitude2": {
+              "field": "label_lon"
+            },
+            "latitude2": {
+              "field": "label_lat"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.callout == 1"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontWeight": 700,
+            "fontSize": 12,
+            "align": "left",
+            "dx": 4
+          },
+          "encoding": {
+            "longitude": {
+              "field": "label_lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "label_lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "callout_label"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Share of land that is national park"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12.5,
+        "fontWeight": 700,
+        "color": "#26302a"
+      },
+      "encoding": {
+        "x": {
+          "value": 515
+        },
+        "y": {
+          "value": 6
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": 34,
+            "c": "#e3ecdc",
+            "label": "Under 5%"
+          },
+          {
+            "y": 53,
+            "c": "#b9d3a8",
+            "label": "5 to 10%"
+          },
+          {
+            "y": 72,
+            "c": "#7fae6b",
+            "label": "10 to 20%"
+          },
+          {
+            "y": 91,
+            "c": "#3f7a3a",
+            "label": "20 to 30%"
+          },
+          {
+            "y": 110,
+            "c": "#1f4d23",
+            "label": "30% or more"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "square",
+            "size": 170,
+            "opacity": 1,
+            "filled": true
+          },
+          "encoding": {
+            "x": {
+              "value": 522
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            },
+            "fill": {
+              "field": "c",
+              "type": "nominal",
+              "scale": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 12,
+            "color": "#3d4740"
+          },
+          "encoding": {
+            "x": {
+              "value": 536
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": 145,
+            "text": [
+              "WA has the most park land of",
+              "any state (84,877 km²), but it",
+              "is only 3.4% of WA."
+            ]
+          },
+          {
+            "y": 220,
+            "text": [
+              "ACT: Namadgi National Park",
+              "covers 45% of the territory."
+            ]
+          },
+          {
+            "y": 278,
+            "text": [
+              "Tasmania: more than a fifth of",
+              "the island is national park."
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12.5,
+        "fontStyle": "italic",
+        "color": "#7a4a26",
+        "lineHeight": 17
+      },
+      "encoding": {
+        "x": {
+          "value": 515
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": null
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "text": [
+              "Click a state to highlight its parks",
+              "in Figure 2. Double-click to clear."
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 11,
+        "color": "#7d867f",
+        "lineHeight": 15
+      },
+      "encoding": {
+        "x": {
+          "value": 515
+        },
+        "y": {
+          "value": 352
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    }
+  ]
+}

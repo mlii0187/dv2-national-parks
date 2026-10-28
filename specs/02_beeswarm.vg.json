@@ -1,0 +1,176 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Figure 2. Beeswarm: every national park in Australia by area (log scale). Data: CAPAD 2024 (DCCEEW).",
+  "width": 740,
+  "height": 260,
+  "padding": 5,
+  "autosize": "pad",
+  "signals": [
+    {
+      "name": "selectedState",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "name": "Highlight a state ",
+        "options": ["All", "ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"]
+      }
+    },
+    {"name": "cy", "update": "height / 2 + 16"},
+    {
+      "name": "stateNames",
+      "value": {"ACT": "ACT", "NSW": "NSW", "NT": "NT", "QLD": "Queensland", "SA": "South Australia", "TAS": "Tasmania", "VIC": "Victoria", "WA": "WA"}
+    }
+  ],
+  "data": [
+    {
+      "name": "parks",
+      "url": "data/national_parks.csv",
+      "format": {"type": "csv", "parse": {"area_km2": "number"}},
+      "transform": [
+        {"type": "formula", "as": "area", "expr": "max(0.01, datum.area_km2)"},
+        {"type": "formula", "as": "label_name", "expr": "replace(datum.name, '—', '–')"}
+      ]
+    },
+    {
+      "name": "stats",
+      "source": "parks",
+      "transform": [
+        {"type": "aggregate", "ops": ["median", "count"], "fields": ["area_km2", "area_km2"], "as": ["median", "n"]}
+      ]
+    },
+    {
+      "name": "selectedCount",
+      "source": "parks",
+      "transform": [
+        {"type": "filter", "expr": "datum.state === selectedState"},
+        {"type": "aggregate", "ops": ["count"], "as": ["n"]}
+      ]
+    },
+    {
+      "name": "biggest",
+      "source": "parks",
+      "transform": [
+        {"type": "window", "sort": {"field": "area_km2", "order": "descending"}, "ops": ["row_number"], "as": ["rank"]},
+        {"type": "filter", "expr": "datum.rank <= 2"}
+      ]
+    }
+  ],
+  "scales": [
+    {"name": "x", "type": "log", "domain": [0.01, 60000], "range": "width", "nice": false}
+  ],
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "x",
+      "values": [0.01, 0.1, 1, 10, 100, 1000, 10000],
+      "format": ",~r",
+      "grid": true,
+      "gridColor": "#efeee8",
+      "title": "Park area in km² (each step to the right is 10 times bigger)"
+    }
+  ],
+  "marks": [
+    {
+      "type": "rule",
+      "from": {"data": "stats"},
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "median"},
+          "y": {"value": 22},
+          "y2": {"signal": "height"},
+          "stroke": {"value": "#a8744a"},
+          "strokeWidth": {"value": 1.5},
+          "strokeDash": {"value": [4, 3]}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "stats"},
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "median", "offset": -6},
+          "y": {"value": 14},
+          "align": {"value": "right"},
+          "text": {"signal": "'Half of all ' + datum.n + ' national parks are smaller than ' + format(datum.median, '.0f') + ' km²'"},
+          "fill": {"value": "#7a4a26"},
+          "fontStyle": {"value": "italic"},
+          "fontSize": {"value": 12.5}
+        }
+      }
+    },
+    {
+      "name": "dots",
+      "type": "symbol",
+      "from": {"data": "parks"},
+      "encode": {
+        "enter": {
+          "xfocus": {"scale": "x", "field": "area"},
+          "yfocus": {"signal": "cy"},
+          "size": {"value": 34},
+          "stroke": {"value": "#ffffff"},
+          "strokeWidth": {"value": 0.6},
+          "tooltip": {"signal": "{'Park': datum.label_name + ' National Park', 'State': datum.state_name, 'Area': format(datum.area_km2, ',.1f') + ' km²'}"}
+        },
+        "update": {
+          "fill": {"signal": "selectedState === 'All' ? '#6aa25c' : (datum.state === selectedState ? '#2f6b30' : '#d6dad2')"},
+          "zindex": {"signal": "datum.state === selectedState ? 1 : 0"}
+        }
+      },
+      "transform": [
+        {
+          "type": "force",
+          "iterations": 300,
+          "static": true,
+          "forces": [
+            {"force": "collide", "iterations": 2, "radius": 3.3},
+            {"force": "x", "x": "xfocus", "strength": 1},
+            {"force": "y", "y": "yfocus", "strength": 0.07}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "rule",
+      "from": {"data": "biggest"},
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "area"},
+          "x2": {"scale": "x", "field": "area", "offset": -14},
+          "y": {"signal": "cy - 6"},
+          "y2": {"signal": "datum.rank == 1 ? 60 : 92"},
+          "stroke": {"value": "#26302a"},
+          "strokeWidth": {"value": 0.8}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "biggest"},
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "area", "offset": -18},
+          "y": {"signal": "datum.rank == 1 ? 56 : 88"},
+          "align": {"value": "right"},
+          "fontWeight": {"value": 700},
+          "fontSize": {"value": 12},
+          "fill": {"value": "#26302a"},
+          "text": {"signal": "datum.label_name + ' (' + datum.state + '), ' + format(datum.area_km2, ',.0f') + ' km²'"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {"value": 0},
+          "y": {"value": 46},
+          "fontSize": {"value": 12.5},
+          "fontWeight": {"value": 600},
+          "fill": {"signal": "selectedState === 'All' ? '#5d665f' : '#2f6b30'"},
+          "text": {"signal": "selectedState === 'All' ? 'Each dot is one national park' : '● ' + stateNames[selectedState] + ': ' + data('selectedCount')[0].n + ' parks highlighted'"}
+        }
+      }
+    }
+  ]
+}

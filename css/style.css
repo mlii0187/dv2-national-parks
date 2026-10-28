@@ -1,0 +1,395 @@
+/* Into the Wild: page styles */
+:root {
+  --paper: #fbfaf6;
+  --card: #ffffff;
+  --ink: #26302a;
+  --body: #3d4740;
+  --muted: #5d665f;
+  --faint: #7d867f;
+  --rule: #e2e3dc;
+  --green: #3f7a3a;
+  --green-dark: #1f4d23;
+  --green-light: #cfe0c4;
+  --brown: #a8744a;
+  --brown-text: #7a4a26;
+  --brown-light: #ead9c6;
+  --serif: "Zilla Slab", Georgia, "Times New Roman", serif;
+  --sans: "Nunito Sans", Arial, sans-serif;
+  --text-col: 280px;
+  --gap: 40px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  color: var(--ink);
+  font-weight: 700;
+  margin: 0;
+}
+
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+
+/* ---------- Header ---------- */
+.masthead {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: var(--gap);
+  align-items: stretch;
+  padding: 48px 0 36px;
+}
+
+.kicker {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+h1 {
+  font-size: 84px;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+
+.dek {
+  margin: 16px 0 10px;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--body);
+  max-width: 34ch;
+}
+
+.byline {
+  margin: 0 0 26px;
+  font-size: 14px;
+  color: var(--faint);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.stat {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 14px 16px 12px;
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--green);
+}
+
+.stat-label {
+  display: block;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.hero {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e9efe4;
+  border: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; object-position: 55% 50%; flex: 1; }
+
+.hero figcaption {
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--faint);
+  background: var(--paper);
+}
+
+/* ---------- Intro ---------- */
+.intro {
+  display: grid;
+  grid-template-columns: var(--text-col) 1fr;
+  gap: var(--gap);
+  padding: 8px 0 40px;
+}
+
+.intro p { margin: 0 0 12px; max-width: 64ch; }
+
+.lead { font-size: 19px; color: var(--ink); }
+
+.data-note {
+  background: #f1f0e9;
+  border-left: 4px solid var(--brown);
+  padding: 14px 18px;
+  border-radius: 0 6px 6px 0;
+  font-size: 15.5px;
+  max-width: 64ch;
+}
+
+.data-note strong { color: var(--ink); }
+
+.contents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+}
+
+.contents li { margin-bottom: 6px; }
+.contents a { text-decoration: none; color: var(--muted); }
+.contents a:hover { color: var(--green); }
+.contents span { display: inline-block; width: 22px; font-weight: 700; color: var(--green); }
+
+/* ---------- Sections ---------- */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  border-top: 1px solid var(--rule);
+  padding: 34px 0 10px;
+}
+
+.section-num {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+h2 { font-size: 40px; line-height: 1.1; }
+
+.section-lede {
+  margin: 0;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* One chart per row: story text on the left, chart on the right */
+.row {
+  display: grid;
+  grid-template-columns: var(--text-col) minmax(0, 1fr);
+  gap: var(--gap);
+  padding: 30px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.row:last-of-type { border-bottom: none; }
+
+.fig-num {
+  margin: 0 0 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brown-text);
+}
+
+h3 { font-size: 25px; line-height: 1.2; margin-bottom: 12px; }
+
+.story p { margin: 0 0 12px; font-size: 16px; }
+
+.hint {
+  font-size: 14.5px !important;
+  font-style: italic;
+  color: var(--brown-text);
+  padding-left: 22px;
+  position: relative;
+}
+
+.hint::before {
+  content: "↳";
+  position: absolute;
+  left: 2px;
+  font-style: normal;
+}
+
+.note {
+  font-size: 14px !important;
+  color: var(--faint);
+}
+
+.chart-col { min-width: 0; }
+
+.chart-pair {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.chart {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.source {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--faint);
+}
+
+.source a { color: var(--faint); }
+
+.chart-error {
+  padding: 24px;
+  background: #f6efe7;
+  color: var(--brown-text);
+  border-radius: 6px;
+}
+
+/* Vega embed tweaks: keep each chart inside its column and scroll it sideways on small screens */
+.chart.vega-embed { display: block; width: 100%; }
+.vega-embed summary { opacity: 0.35; transition: opacity 0.2s; }
+.vega-embed:hover summary { opacity: 1; }
+
+.vega-bindings {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.vega-bindings select {
+  font: inherit;
+  padding: 4px 8px;
+  border: 1px solid #c9cdc5;
+  border-radius: 5px;
+  background: #fff;
+  color: var(--ink);
+}
+
+#vg-tooltip-element {
+  font-family: var(--sans);
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 4px 14px rgba(38, 48, 42, 0.14);
+}
+
+#vg-tooltip-element table tr td.key { color: var(--faint); }
+
+/* ---------- Tips ---------- */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.tip {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 18px 18px 16px;
+}
+
+.tip-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.tip h4 {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.tip p { margin: 0; font-size: 15px; line-height: 1.5; }
+
+.tip .see { display: block; margin-top: 8px; font-size: 13px; color: var(--faint); }
+
+.closing {
+  font-size: 18px;
+  color: var(--ink);
+  max-width: 64ch;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: 30px;
+  border-top: 1px solid var(--rule);
+  padding: 34px 0 60px;
+  display: grid;
+  grid-template-columns: var(--text-col) 1fr;
+  gap: var(--gap);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.site-footer h2 { font-size: 24px; }
+
+.site-footer h3 {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin: 0 0 8px;
+}
+
+.site-footer ol { margin: 0 0 22px; padding-left: 20px; }
+.site-footer li { margin-bottom: 6px; }
+.site-footer p { margin: 0 0 12px; }
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 1060px) {
+  .masthead { grid-template-columns: 1fr; }
+  .hero { max-height: 260px; }
+  .intro, .row, .site-footer { grid-template-columns: 1fr; gap: 18px; }
+  .tips { grid-template-columns: 1fr; }
+  h1 { font-size: 56px; }
+}
+
+@media (max-width: 600px) {
+  .page { padding: 0 16px; }
+  .stats { grid-template-columns: 1fr; }
+  h2 { font-size: 28px; }
+}
